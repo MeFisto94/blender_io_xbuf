@@ -205,6 +205,20 @@ def export_all_tobjects(scene, data, cfg):
         if obj.hide_render:
             continue
         if cfg.need_update(obj):
+            if obj.dupli_group != None:
+                import os
+                # dupliPath: Path to the Blenderfile to which the linked Group belongs to
+                dupliPath = obj.dupli_group.library.filepath
+                # absolute path to the asset directory
+                assetPath = os.path.expanduser(cfg.assets_path)
+                # folder containing this blender file
+                thisFolder = os.path.dirname(bpy.data.filepath)
+                # pathRelativeToAssetDir: Calculate the absolute filepath (dupliPath + this file's path) in relation to the asset path
+                pathRelativeToAssetDir = os.path.relpath(thisFolder + dupliPath, assetPath)
+                #os.path.normpath(pathRelativeToAssetDir) would strip away ./ and ./A/../ etc.
+
+                cfg.info("Found DupliGroup reference '%s', referenced from '%s' in '%s'" % (obj.dupli_group.name, pathRelativeToAssetDir, os.path.relpath(bpy.data.filepath, assetPath)))
+                obj['SYS_LOAD_J3O'] = pathRelativeToAssetDir
             tobject = data.tobjects.add()
             tobject.id = cfg.id_of(obj)
             tobject.name = obj.name

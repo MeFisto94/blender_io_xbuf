@@ -4,6 +4,13 @@ License: [GPL](LICENSE.txt)
 
 > The addon is WIP
 
+# Changes in Branch feature-dupligroups
+In Blender you can "Duplicate a Group" from another Blender File. This happens when linking in a blender file and selecting a group.
+After a group has been linked into blender, you can alt+d to duplicate them.  
+This feature will add a UserData `SYS_LOAD_J3O`, which contains the path (relative to the AssetManager) to the blender file containing the Duplicate Group.  
+Note that this does not honor what the group consists of, because typically you use this method to link in the whole scene (and thus create a group containing all objects).  
+Other ways of linking (e.g. a complete scene) are not support and the UserData needs handling in UserCode but thus does not require changes to the importer.
+
 # Uses Cases
 
 * Preview model with game engine
